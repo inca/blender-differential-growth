@@ -1,5 +1,7 @@
 # Differential Growth
 
+![](demo.png)
+
 ## Development
 
 It can be painful to develop in Blender's text editor.
