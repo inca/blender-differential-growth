@@ -10,6 +10,11 @@ class DiffGrowthStepOperator(bpy.types.Operator):
 
     def execute(self, context):
         obj = context.object
+
+        if obj.vertex_groups.active_index:
+            self.report({ "WARNING" }, "A vertex group is required; switch to Weight Paint and define the growth area")
+            return { "CANCELLED" }
+
         settings = obj.diff_growth_settings
         bm = bmesh.new()
         bm.from_mesh(obj.data)
@@ -31,7 +36,7 @@ class DiffGrowthStepOperator(bpy.types.Operator):
         bm.to_mesh(obj.data)
         bm.free()
         obj.data.update()
-        return {'FINISHED'}
+        return { "FINISHED" }
 
 
 def grow_step(
@@ -48,7 +53,7 @@ def grow_step(
     fac_noise,
 ):
     group_index = obj.vertex_groups.active_index
-    seed_vector = Vector((0, 0, 1)) * seed;
+    seed_vector = Vector((0, 0, 1)) * seed
 
     # Collect vertices with weights
     verts = []
