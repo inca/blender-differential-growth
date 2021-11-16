@@ -29,7 +29,7 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
     dt: bpy.props.FloatProperty(
         name="dt",
         description="Time step for simulation; smaller values produce more accurate result, but take longer",
-        default=.05,
+        default=.025,
         min=.001,
         max=1,
     )
@@ -37,7 +37,7 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
     weight_decay: bpy.props.FloatProperty(
         name="Weight Decay",
         description="Value of 1.0 causes no decay, higher values cause weight to drop more quickly",
-        default=1,
+        default=1.5,
         min=0.01,
         max=10,
     )
@@ -45,7 +45,7 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
     noise_scale: bpy.props.FloatProperty(
         name="Noise Scale",
         description="Higher value produce high frequency noise",
-        default=2,
+        default=5,
         min=0.01,
         max=100,
     )

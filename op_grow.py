@@ -11,7 +11,7 @@ class DiffGrowthStepOperator(bpy.types.Operator):
     def execute(self, context):
         obj = context.object
 
-        if obj.vertex_groups.active_index:
+        if obj.vertex_groups.active_index == -1:
             self.report({ "WARNING" }, "A vertex group is required; switch to Weight Paint and define the growth area")
             return { "CANCELLED" }
 
@@ -160,6 +160,6 @@ def calc_vert_repulsion(vert, kd, radius):
             continue;
         direction = (vert.co - co).normalized()
         magnitude = math.exp(distance - radius)
-        # magnitude = distance
+        # magnitude = 1 / (distance * distance)
         result += direction * magnitude
     return result;
