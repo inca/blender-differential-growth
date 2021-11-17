@@ -91,6 +91,9 @@ def grow_step(
     for i, vert in enumerate(bm.verts):
         w = get_vertex_weight(bm, vert, group_index)
         w = w ** weight_decay;
+        # Hack to prevent non-reducing "red areas" after certain subdivision patters
+        if not vert.is_boundary:
+            w -= 0.01;
         set_vertex_weight(bm, vert, group_index, w)
 
     # Subdivide
@@ -111,7 +114,14 @@ def grow_step(
             smooth=1.0,
             cuts=1,
             use_grid_fill=True,
-            use_single_edge=True,)
+            use_single_edge=True)
+        # Triangulate adjacent faces
+        adjacent_faces = set()
+        for edge in edges_to_subdivide:
+            adjacent_faces.update(edge.link_faces)
+        bmesh.ops.triangulate(
+            bm,
+            faces=list(adjacent_faces))
 
 def get_vertex_weight(bm, vert, group_index):
     weight_layer = bm.verts.layers.deform.active
