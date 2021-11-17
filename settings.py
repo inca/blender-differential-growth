@@ -10,14 +10,6 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
         max=1000,
     )
 
-    collision_radius: bpy.props.FloatProperty(
-        name="Collision Radius",
-        description="Radius for collision detection",
-        default=.1,
-        min=.01,
-        max=2,
-    )
-
     split_radius: bpy.props.FloatProperty(
         name="Split Radius",
         description="Radius for edge subdivision",
@@ -25,6 +17,15 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
         min=.01,
         max=2,
     )
+
+    collision_radius: bpy.props.FloatProperty(
+        name="Repulsion Radius",
+        description="Radius for calculating the repulsion force",
+        default=.1,
+        min=.01,
+        max=2,
+    )
+
 
     dt: bpy.props.FloatProperty(
         name="dt",
