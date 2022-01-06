@@ -23,6 +23,7 @@ class DiffGrowthPanel(bpy.types.Panel):
 
         row = layout.row()
         row.prop(settings, 'weight_decay')
+        row.prop(settings, 'decay_boundary')
 
         row = layout.row()
         row.prop(settings, 'fac_attr')

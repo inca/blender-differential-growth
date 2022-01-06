@@ -43,6 +43,12 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
         max=10,
     )
 
+    decay_boundary: bpy.props.BoolProperty(
+        name="Decay on Boundary",
+        description="If enabled, weight will not decay on boundary vertices",
+        default=False
+    )
+
     noise_scale: bpy.props.FloatProperty(
         name="Noise Scale",
         description="Higher value produce high frequency noise",

@@ -27,6 +27,7 @@ class DiffGrowthStepOperator(bpy.types.Operator):
             split_radius=settings.split_radius,
             dt=settings.dt,
             weight_decay=settings.weight_decay,
+            decay_boundary=settings.decay_boundary,
             noise_scale=settings.noise_scale,
             fac_attr=settings.fac_attr,
             fac_rep=settings.fac_rep,
@@ -47,6 +48,7 @@ def grow_step(
     split_radius,
     dt,
     weight_decay,
+    decay_boundary,
     noise_scale,
     fac_attr,
     fac_rep,
@@ -90,10 +92,12 @@ def grow_step(
     # Readjust weights
     for i, vert in enumerate(bm.verts):
         w = get_vertex_weight(bm, vert, group_index)
-        w = w ** weight_decay;
-        # Hack to prevent non-reducing "red areas" after certain subdivision patters
         if not vert.is_boundary:
-            w -= 0.01;
+            if (w == 1):
+                # Hack to prevent non-reducing "red areas" after certain subdivision patters
+                w -= 0.01;
+        if (not vert.is_boundary) or decay_boundary:
+            w = w ** weight_decay;
         set_vertex_weight(bm, vert, group_index, w)
 
     # Subdivide
