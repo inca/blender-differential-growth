@@ -32,8 +32,8 @@ class DiffGrowthStepOperator(bpy.types.Operator):
             fac_attr=settings.fac_attr,
             fac_rep=settings.fac_rep,
             fac_noise=settings.fac_noise,
-            fac_gravity=settings.fac_gravity,
-            gravity_object=settings.gravity_object,
+            fac_growth_dir=settings.fac_growth_dir,
+            growth_dir_obj=settings.growth_dir_obj,
         )
 
         bm.to_mesh(obj.data)
@@ -52,11 +52,11 @@ def grow_step(
     weight_decay,
     decay_boundary,
     noise_scale,
+    growth_dir_obj,
     fac_attr,
     fac_rep,
     fac_noise,
-    fac_gravity,
-    gravity_object,
+    fac_growth_dir,
 ):
     group_index = obj.vertex_groups.active_index
     seed_vector = Vector((0, 0, 1)) * seed
@@ -85,15 +85,15 @@ def grow_step(
         f_attr = calc_vert_attraction(vert)
         f_rep = calc_vert_repulsion(vert, kd, collision_radius)
         f_noise = noise.noise_vector(vert.co * noise_scale + seed_vector)
-        gravity_vec = Vector((0, 0, -1))
-        if gravity_object:
-            gravity_vec = (gravity_object.location - vert.co).normalized()
+        growth_vec = Vector((0, 0, 1))
+        if growth_dir_obj:
+            growth_vec = (growth_dir_obj.location - vert.co).normalized()
         # print('%s %s %s' % (f_attr, f_rep, f_noise))
         force = \
             fac_attr * f_attr + \
             fac_rep * f_rep + \
             fac_noise * f_noise + \
-            fac_gravity * gravity_vec;
+            fac_growth_dir * growth_vec;
         offset = force * dt * dt * weight;
         vert.co += offset
 

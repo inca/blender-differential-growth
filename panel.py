@@ -34,8 +34,8 @@ class DiffGrowthPanel(bpy.types.Panel):
         row.prop(settings, 'noise_scale')
 
         row = layout.row()
-        row.prop(settings, 'gravity_object')
-        row.prop(settings, 'fac_gravity')
+        row.prop(settings, 'growth_dir_obj')
+        row.prop(settings, 'fac_growth_dir')
 
         row = layout.row()
         row.operator('object.diff_growth_step')

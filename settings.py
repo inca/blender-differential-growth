@@ -57,12 +57,18 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
         max=100,
     )
 
+    growth_dir_obj: bpy.props.PointerProperty(
+        name="Growth Direction Object",
+        description="The object towards which to grow; if not specified, +Z is used",
+        type=bpy.types.Object
+    )
+
     fac_attr: bpy.props.FloatProperty(
         name="Attraction Factor",
         description="Attraction Factor",
         default=1,
         min=0,
-        max=100,
+        max=1000,
     )
 
     fac_rep: bpy.props.FloatProperty(
@@ -70,7 +76,7 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
         description="Repulsion Factor",
         default=1,
         min=0,
-        max=100,
+        max=1000,
     )
 
     fac_noise: bpy.props.FloatProperty(
@@ -78,19 +84,13 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
         description="Noise Factor",
         default=1,
         min=0,
-        max=100,
+        max=1000,
     )
 
-    gravity_object: bpy.props.PointerProperty(
-        name="Gravity Object",
-        description="The object towards which to apply the gravity; if not specified, the gravity is applied along -Z",
-        type=bpy.types.Object
-    )
-
-    fac_gravity: bpy.props.FloatProperty(
-        name="Gravity Factor",
-        description="Gravity Factor",
+    fac_growth_dir: bpy.props.FloatProperty(
+        name="Growth Direction Factor",
+        description="Growth Direction Factor",
         default=0,
-        min=0,
-        max=100,
+        min=-1000,
+        max=1000,
     )
