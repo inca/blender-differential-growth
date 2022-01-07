@@ -22,18 +22,7 @@ class DiffGrowthStepOperator(bpy.types.Operator):
         grow_step(
             obj,
             bm,
-            seed=settings.seed,
-            collision_radius=settings.collision_radius,
-            split_radius=settings.split_radius,
-            dt=settings.dt,
-            weight_decay=settings.weight_decay,
-            decay_boundary=settings.decay_boundary,
-            noise_scale=settings.noise_scale,
-            fac_attr=settings.fac_attr,
-            fac_rep=settings.fac_rep,
-            fac_noise=settings.fac_noise,
-            fac_growth_dir=settings.fac_growth_dir,
-            growth_dir_obj=settings.growth_dir_obj,
+            settings
         )
 
         bm.to_mesh(obj.data)
@@ -45,21 +34,10 @@ class DiffGrowthStepOperator(bpy.types.Operator):
 def grow_step(
     obj,
     bm,
-    seed,
-    collision_radius,
-    split_radius,
-    dt,
-    weight_decay,
-    decay_boundary,
-    noise_scale,
-    growth_dir_obj,
-    fac_attr,
-    fac_rep,
-    fac_noise,
-    fac_growth_dir,
+    settings,
 ):
     group_index = obj.vertex_groups.active_index
-    seed_vector = Vector((0, 0, 1)) * seed
+    seed_vector = Vector((0, 0, 1)) * settings.seed
 
     # Collect vertices with weights
     verts = []
@@ -83,18 +61,18 @@ def grow_step(
         if weight == 0:
             continue
         f_attr = calc_vert_attraction(vert)
-        f_rep = calc_vert_repulsion(vert, kd, collision_radius)
-        f_noise = noise.noise_vector(vert.co * noise_scale + seed_vector)
+        f_rep = calc_vert_repulsion(vert, kd, settings.collision_radius)
+        f_noise = noise.noise_vector(vert.co * settings.noise_scale + seed_vector)
         growth_vec = Vector((0, 0, 1))
-        if growth_dir_obj:
-            growth_vec = (growth_dir_obj.location - vert.co).normalized()
+        if settings.growth_dir_obj:
+            growth_vec = (settings.growth_dir_obj.location - vert.co).normalized()
         # print('%s %s %s' % (f_attr, f_rep, f_noise))
         force = \
-            fac_attr * f_attr + \
-            fac_rep * f_rep + \
-            fac_noise * f_noise + \
-            fac_growth_dir * growth_vec;
-        offset = force * dt * dt * weight;
+            settings.fac_attr * f_attr + \
+            settings.fac_rep * f_rep + \
+            settings.fac_noise * f_noise + \
+            settings.fac_growth_dir * growth_vec;
+        offset = force * settings.dt * settings.dt * weight;
         vert.co += offset
 
     # Readjust weights
@@ -104,8 +82,8 @@ def grow_step(
             if (w == 1):
                 # Hack to prevent non-reducing "red areas" after certain subdivision patters
                 w -= 0.01;
-        if (not vert.is_boundary) or decay_boundary:
-            w = w ** weight_decay;
+        if (not vert.is_boundary) or settings.decay_boundary:
+            w = w ** settings.weight_decay;
         set_vertex_weight(bm, vert, group_index, w)
 
     # Subdivide
@@ -115,7 +93,7 @@ def grow_step(
         if avg_weight == 0:
             continue
         l = edge.calc_length()
-        if (l / split_radius) > (1 / avg_weight):
+        if (l / settings.split_radius) > (1 / avg_weight):
             edges_to_subdivide.append(edge)
 
     if len(edges_to_subdivide) > 0:
