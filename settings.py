@@ -80,3 +80,17 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
         min=0,
         max=100,
     )
+
+    gravity_object: bpy.props.PointerProperty(
+        name="Gravity Object",
+        description="The object towards which to apply the gravity; if not specified, the gravity is applied along -Z",
+        type=bpy.types.Object
+    )
+
+    fac_gravity: bpy.props.FloatProperty(
+        name="Gravity Factor",
+        description="Gravity Factor",
+        default=0,
+        min=0,
+        max=100,
+    )
