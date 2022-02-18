@@ -2,35 +2,26 @@ import bpy
 
 class DiffGrowthSettings(bpy.types.PropertyGroup):
 
-    seed: bpy.props.IntProperty(
-        name="Seed",
-        description="Noise seed",
-        default=1,
-        min=1,
-        max=1000,
-    )
-
     split_radius: bpy.props.FloatProperty(
         name="Split Radius",
-        description="Radius for edge subdivision",
-        default=.1,
+        description="Edges above this radius will be subdivided",
+        default=.5,
         min=.01,
-        max=2,
+        max=10,
     )
 
-    collision_radius: bpy.props.FloatProperty(
+    repulsion_radius: bpy.props.FloatProperty(
         name="Repulsion Radius",
-        description="Radius for calculating the repulsion force",
-        default=.1,
-        min=.01,
-        max=2,
+        description="",
+        default=.5,
+        min=1,
+        max=10,
     )
-
 
     dt: bpy.props.FloatProperty(
         name="dt",
         description="Time step for simulation; smaller values produce more accurate result, but take longer",
-        default=.025,
+        default=.1,
         min=.001,
         max=1,
     )
@@ -49,10 +40,18 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
         default=False
     )
 
+    seed: bpy.props.IntProperty(
+        name="Seed",
+        description="Noise seed",
+        default=1,
+        min=1,
+        max=1000,
+    )
+
     noise_scale: bpy.props.FloatProperty(
         name="Noise Scale",
         description="Higher value produce high frequency noise",
-        default=5,
+        default=2,
         min=0.01,
         max=100,
     )

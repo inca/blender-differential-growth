@@ -60,23 +60,21 @@ def grow_step(
         weight = get_vertex_weight(bm, vert, group_index)
         if weight == 0:
             continue
-        f_attr = calc_vert_attraction(vert)
-        f_rep = calc_vert_repulsion(vert, kd, settings.collision_radius)
+        # f_attr = calc_vert_attraction(vert)
+        f_rep = calc_vert_repulsion(vert, kd, settings.repulsion_radius)
         f_noise = noise.noise_vector(vert.co * settings.noise_scale + seed_vector)
         growth_vec = Vector((0, 0, 1))
         if settings.growth_dir_obj:
             growth_vec = (settings.growth_dir_obj.location - vert.co).normalized()
         # print('%s %s %s' % (f_attr, f_rep, f_noise))
         force = \
-            settings.fac_attr * f_attr + \
             settings.fac_rep * f_rep + \
             settings.fac_noise * f_noise + \
             settings.fac_growth_dir * growth_vec;
         offset = force * settings.dt * settings.dt * weight;
         vert.co += offset
 
-    # Readjust weights
-    for i, vert in enumerate(bm.verts):
+        # Readjust weights
         w = get_vertex_weight(bm, vert, group_index)
         if not vert.is_boundary:
             if (w == 1):
@@ -84,6 +82,7 @@ def grow_step(
                 w -= 0.01;
         if (not vert.is_boundary) or settings.decay_boundary:
             w = w ** settings.weight_decay;
+        # w += (2 * f_noise.magnitude - 1) * .01;
         set_vertex_weight(bm, vert, group_index, w)
 
     # Subdivide
@@ -155,11 +154,11 @@ def calc_vert_attraction(vert):
 
 def calc_vert_repulsion(vert, kd, radius):
     result = Vector()
-    for (co, index, distance) in kd.find_range(vert.co, radius * 2):
+    for (co, index, distance) in kd.find_range(vert.co, radius):
         if (index == vert.index):
             continue;
         direction = (vert.co - co).normalized()
-        magnitude = math.exp(distance - radius)
-        # magnitude = 1 / (distance * distance)
+        # magnitude = radius / distance - 1
+        magnitude = math.exp(-1 * (distance / radius) + 1) - 1
         result += direction * magnitude
     return result;

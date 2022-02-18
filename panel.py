@@ -13,22 +13,8 @@ class DiffGrowthPanel(bpy.types.Panel):
         settings = obj.diff_growth_settings
 
         row = layout.row()
-        row.prop(settings, 'seed')
-
-        row = layout.row()
-        row.prop(settings, 'dt')
-
-        row = layout.row()
-        row.prop(settings, 'weight_decay')
-        row.prop(settings, 'decay_boundary')
-
-        row = layout.row()
         row.prop(settings, 'split_radius')
-        row.prop(settings, 'fac_attr')
-
-        row = layout.row()
-        row.prop(settings, 'collision_radius');
-        row.prop(settings, 'fac_rep')
+        row.prop(settings, 'repulsion_radius')
 
         row = layout.row()
         row.prop(settings, 'noise_scale')
@@ -37,6 +23,16 @@ class DiffGrowthPanel(bpy.types.Panel):
         row = layout.row()
         row.prop(settings, 'growth_dir_obj')
         row.prop(settings, 'fac_growth_dir')
+
+        row = layout.row()
+        row.prop(settings, 'weight_decay')
+        row.prop(settings, 'decay_boundary')
+
+        row = layout.row()
+        row.prop(settings, 'seed')
+
+        row = layout.row()
+        row.prop(settings, 'dt')
 
         row = layout.row()
         row.operator('object.diff_growth_step')
