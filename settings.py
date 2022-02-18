@@ -13,31 +13,25 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
     repulsion_radius: bpy.props.FloatProperty(
         name="Repulsion Radius",
         description="",
-        default=.5,
-        min=1,
+        default=1,
+        min=0,
         max=10,
     )
 
     dt: bpy.props.FloatProperty(
-        name="dt",
-        description="Time step for simulation; smaller values produce more accurate result, but take longer",
+        name="Step size",
+        description="How much growth to apply on each step",
         default=.1,
         min=.001,
-        max=1,
-    )
-
-    weight_decay: bpy.props.FloatProperty(
-        name="Weight Decay",
-        description="Value of 1.0 causes no decay, higher values cause weight to drop more quickly",
-        default=1.5,
-        min=0.01,
         max=10,
     )
 
-    decay_boundary: bpy.props.BoolProperty(
-        name="Decay on Boundary",
-        description="If enabled, weight will not decay on boundary vertices",
-        default=False
+    scale: bpy.props.FloatVectorProperty(
+        name="Step Scale",
+        description="Applies per-component scale to each movement; can be used to limit motion to specific axis",
+        default=(1.0,1.0,1.0),
+        size=3,
+        subtype='XYZ'
     )
 
     seed: bpy.props.IntProperty(
@@ -92,4 +86,20 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
         default=0,
         min=-1000,
         max=1000,
+    )
+
+    inhibit_base: bpy.props.FloatProperty(
+        name="Base Factor",
+        description="Inhibit non-boundary growth",
+        default=1,
+        min=0,
+        max=10,
+    )
+
+    inhibit_shell: bpy.props.FloatProperty(
+        name="Shell Factor",
+        description="Inhibit growth based on vertex sharpness",
+        default=0,
+        min=0,
+        max=10,
     )

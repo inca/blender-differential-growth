@@ -12,27 +12,39 @@ class DiffGrowthPanel(bpy.types.Panel):
         obj = context.object
         settings = obj.diff_growth_settings
 
-        row = layout.row()
+        box = layout.box()
+        box.label(text='Basics')
+        row = box.row()
         row.prop(settings, 'split_radius')
+        row = box.row()
         row.prop(settings, 'repulsion_radius')
+        row = box.row()
+        row.prop(settings, 'dt')
+        row = box.row()
+        row.prop(settings, 'scale')
 
-        row = layout.row()
+        box = layout.box()
+        box.label(text='Noise')
+        row = box.row()
         row.prop(settings, 'noise_scale')
+        row = box.row()
         row.prop(settings, 'fac_noise')
-
-        row = layout.row()
-        row.prop(settings, 'growth_dir_obj')
-        row.prop(settings, 'fac_growth_dir')
-
-        row = layout.row()
-        row.prop(settings, 'weight_decay')
-        row.prop(settings, 'decay_boundary')
-
-        row = layout.row()
+        row = box.row()
         row.prop(settings, 'seed')
 
-        row = layout.row()
-        row.prop(settings, 'dt')
+        box = layout.box()
+        box.label(text='Growth Direction')
+        row = box.row()
+        row.prop(settings, 'growth_dir_obj')
+        row = box.row()
+        row.prop(settings, 'fac_growth_dir')
+
+        box = layout.box()
+        box.label(text='Growth Inhibitors')
+        row = box.row()
+        row.prop(settings, 'inhibit_base')
+        row = box.row()
+        row.prop(settings, 'inhibit_concave')
 
         row = layout.row()
         row.operator('object.diff_growth_step')

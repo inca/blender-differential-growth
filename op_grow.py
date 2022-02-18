@@ -38,51 +38,43 @@ def grow_step(
 ):
     group_index = obj.vertex_groups.active_index
     seed_vector = Vector((0, 0, 1)) * settings.seed
+    scale = Vector(settings.scale)
 
     # Collect vertices with weights
-    verts = []
     edges = set()
-
-    for vert in bm.verts:
-        weight = get_vertex_weight(bm, vert, group_index)
-        if weight > 0:
-            verts.append(vert)
-            for edge in vert.link_edges:
-                edges.add(edge)
 
     kd = kdtree.KDTree(len(bm.verts))
     for i, vert in enumerate(bm.verts):
         kd.insert(vert.co, i)
     kd.balance()
 
-    # Calc forces
-    for vert in verts:
-        weight = get_vertex_weight(bm, vert, group_index)
-        if weight == 0:
+    for vert in bm.verts:
+        w = get_vertex_weight(bm, vert, group_index)
+        if w == 0:
             continue
+        # Remember edge for subsequent subdivision
+        for edge in vert.link_edges:
+            edges.add(edge)
+        # Calculate forces
         # f_attr = calc_vert_attraction(vert)
         f_rep = calc_vert_repulsion(vert, kd, settings.repulsion_radius)
         f_noise = noise.noise_vector(vert.co * settings.noise_scale + seed_vector)
         growth_vec = Vector((0, 0, 1))
         if settings.growth_dir_obj:
             growth_vec = (settings.growth_dir_obj.location - vert.co).normalized()
-        # print('%s %s %s' % (f_attr, f_rep, f_noise))
         force = \
             settings.fac_rep * f_rep + \
             settings.fac_noise * f_noise + \
             settings.fac_growth_dir * growth_vec;
-        offset = force * settings.dt * settings.dt * weight;
-        vert.co += offset
+        offset = force * settings.dt * settings.dt * w;
+        vert.co += offset * scale
 
         # Readjust weights
-        w = get_vertex_weight(bm, vert, group_index)
-        if not vert.is_boundary:
-            if (w == 1):
-                # Hack to prevent non-reducing "red areas" after certain subdivision patters
-                w -= 0.01;
-        if (not vert.is_boundary) or settings.decay_boundary:
-            w = w ** settings.weight_decay;
-        # w += (2 * f_noise.magnitude - 1) * .01;
+        if (not vert.is_boundary):
+            w = w ** (1 + settings.inhibit_base);
+        if (settings.inhibit_shell > 0):
+            sh = vert.calc_shell_factor()
+            w = w * 1 / pow(sh, settings.inhibit_shell)
         set_vertex_weight(bm, vert, group_index, w)
 
     # Subdivide
