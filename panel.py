@@ -44,7 +44,7 @@ class DiffGrowthPanel(bpy.types.Panel):
         row = box.row()
         row.prop(settings, 'inhibit_base')
         row = box.row()
-        row.prop(settings, 'inhibit_concave')
+        row.prop(settings, 'inhibit_shell')
 
         row = layout.row()
         row.operator('object.diff_growth_step')

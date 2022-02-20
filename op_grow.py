@@ -71,10 +71,10 @@ def grow_step(
 
         # Readjust weights
         if (not vert.is_boundary):
-            w = w ** (1 + settings.inhibit_base);
+            w = w ** (1 + settings.inhibit_base) - 0.01;
         if (settings.inhibit_shell > 0):
             sh = vert.calc_shell_factor()
-            w = w * 1 / pow(sh, settings.inhibit_shell)
+            w = w * pow(sh, -1 * settings.inhibit_shell)
         set_vertex_weight(bm, vert, group_index, w)
 
     # Subdivide
