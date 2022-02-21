@@ -24,11 +24,15 @@ class DiffGrowthPanel(bpy.types.Panel):
         row.prop(settings, 'scale')
 
         box = layout.box()
-        box.label(text='Noise')
+        box.label(text='Forces')
         row = box.row()
-        row.prop(settings, 'noise_scale')
+        row.prop(settings, 'fac_attr')
+        row = box.row()
+        row.prop(settings, 'fac_rep')
         row = box.row()
         row.prop(settings, 'fac_noise')
+        row = box.row()
+        row.prop(settings, 'noise_scale')
         row = box.row()
         row.prop(settings, 'seed')
 

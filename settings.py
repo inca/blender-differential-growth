@@ -59,7 +59,7 @@ class DiffGrowthSettings(bpy.types.PropertyGroup):
     fac_attr: bpy.props.FloatProperty(
         name="Attraction Factor",
         description="Attraction Factor",
-        default=1,
+        default=0,
         min=0,
         max=1000,
     )

@@ -56,13 +56,14 @@ def grow_step(
         for edge in vert.link_edges:
             edges.add(edge)
         # Calculate forces
-        # f_attr = calc_vert_attraction(vert)
+        f_attr = calc_vert_attraction(vert)
         f_rep = calc_vert_repulsion(vert, kd, settings.repulsion_radius)
         f_noise = noise.noise_vector(vert.co * settings.noise_scale + seed_vector)
         growth_vec = Vector((0, 0, 1))
         if settings.growth_dir_obj:
             growth_vec = (settings.growth_dir_obj.location - vert.co).normalized()
         force = \
+            settings.fac_attr * f_attr + \
             settings.fac_rep * f_rep + \
             settings.fac_noise * f_noise + \
             settings.fac_growth_dir * growth_vec;
@@ -70,9 +71,10 @@ def grow_step(
         vert.co += offset * scale
 
         # Readjust weights
-        if (not vert.is_boundary):
-            w = w ** (1 + settings.inhibit_base) - 0.01;
-        if (settings.inhibit_shell > 0):
+        if settings.inhibit_base > 0:
+            if not vert.is_boundary:
+                w = w ** (1 + settings.inhibit_base) - 0.01;
+        if settings.inhibit_shell > 0:
             sh = vert.calc_shell_factor()
             w = w * pow(sh, -1 * settings.inhibit_shell)
         set_vertex_weight(bm, vert, group_index, w)
