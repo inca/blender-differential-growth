@@ -1,12 +1,12 @@
 # Differential Growth for Blender
 
-_Please see [the orginal blog post](https://boris.okunskiy.name/posts/blender-differential-growth) for a formal introduction_.
+[Latest release](https://github.com/inca/blender-differential-growth/releases/latest) · _Please see [the orginal blog post](https://boris.okunskiy.name/posts/blender-differential-growth) for a formal introduction_.
 
 <p align="center">
   <img src="https://boris.okunskiy.name/posts/lichen1-transparent-small.png"/>
 </p>
 
-Differential growth is a generative algorithm inspired by the growth occurring in living organisms such as lichens, algae, poriferas and other kinds of organic forms.
+Differential growth is a generative algorithm inspired by the growth occurring in living organisms such as lichens, algae, poriferae, corals and other kinds of organic forms.
 
 ## Installation
 
