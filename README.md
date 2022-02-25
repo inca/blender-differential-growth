@@ -1,6 +1,6 @@
 # Differential Growth for Blender
 
-[Latest release](https://github.com/inca/blender-differential-growth/releases/latest) · _Please see [the orginal blog post](https://boris.okunskiy.name/posts/blender-differential-growth) for a formal introduction_.
+[Latest release](https://github.com/inca/blender-differential-growth/releases/latest) · _Please see [the orginal blog post](https://boris.okunskiy.name/media/posts/blender-differential-growth) for a formal introduction_.
 
 <p align="center">
   <img src="https://boris.okunskiy.name/posts/lichen1-transparent-small.png"/>
