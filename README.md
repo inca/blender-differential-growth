@@ -4,9 +4,9 @@
 
 <p align="center">
     <picture>
-        <source srcset="/media/posts/lichen1-transparent.webp" type="image/webp">
-        <source srcset="/media/posts/lichen1-transparent.png" type="image/png">
-        <img src="/media/posts/lichen1-transparent.png"
+        <source srcset="https://boris.okunskiy.name/media/posts/lichen1-transparent.webp" type="image/webp">
+        <source srcset="https://boris.okunskiy.name/media/posts/lichen1-transparent.png" type="image/png">
+        <img src="https://boris.okunskiy.name/media/posts/lichen1-transparent.png"
             width="640"
             alt="Foliose lichen mesh"/>
     </picture>
