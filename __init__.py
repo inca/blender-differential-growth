@@ -13,11 +13,11 @@ import bpy
 bl_info = {
     'name': 'Differential Growth',
     'description': 'Grow mesh into nature-inspired wavy forms',
-    'version': (2, 1, 1),
+    'version': (2, 2, 0),
     'author': 'Boris Okunskiy',
     'tracker_url': 'https://github.com/inca/blender-differential-growth/issues',
     'location': 'Properties > Object > Differential Growth',
-    'blender': (2, 90, 0),
+    'blender': (4, 30, 0),
     'category': 'Object'
 }
 

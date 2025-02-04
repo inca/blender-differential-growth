@@ -31,6 +31,8 @@ It can be painful to develop in Blender's text editor.
 
 One good solution is to symlink the repo to the Blender's addon location, then develop using your favorite editor.
 
+Then use F3 -> Reload Scripts every time the change is made.
+
 ### Mac/Linux
 
 Locate the addons directory, then replace `ADDONS_DIR` in `symlink.sh` and run it.

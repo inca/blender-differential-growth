@@ -11,6 +11,10 @@ class DiffGrowthStepOperator(bpy.types.Operator):
     def execute(self, context):
         obj = context.object
 
+        if obj is None or obj.type != 'MESH':
+            self.report({ "WARNING" }, "Active object must be a mesh")
+            return { "CANCELLED" }
+
         if obj.vertex_groups.active_index == -1:
             self.report({ "WARNING" }, "A vertex group is required; switch to Weight Paint and define the growth area")
             return { "CANCELLED" }
@@ -25,6 +29,7 @@ class DiffGrowthStepOperator(bpy.types.Operator):
             settings
         )
 
+        bm.normal_update()
         bm.to_mesh(obj.data)
         bm.free()
         obj.data.update()
@@ -52,9 +57,11 @@ def grow_step(
         w = get_vertex_weight(bm, vert, group_index)
         if w == 0:
             continue
+
         # Remember edge for subsequent subdivision
         for edge in vert.link_edges:
             edges.add(edge)
+
         # Calculate forces
         f_attr = calc_vert_attraction(vert)
         f_rep = calc_vert_repulsion(vert, kd, settings.repulsion_radius)
@@ -105,6 +112,8 @@ def grow_step(
         bmesh.ops.triangulate(
             bm,
             faces=list(adjacent_faces))
+        # Update normals
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
 
 def get_vertex_weight(bm, vert, group_index):
     weight_layer = bm.verts.layers.deform.active
